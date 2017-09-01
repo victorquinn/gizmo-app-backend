@@ -28,12 +28,16 @@ sequelize.sync().then(() => {
 const app = express()
 
 // Get all scores
-app.get('/scores', (req, res) => {
-    res.json([{
-        userId: 1,
-        score: 230,
-        createdAt: '2017-09-01 12:59',
-    }])
+app.get('/scores', async (req, res) => {
+    let scores = await Score.findAll();
+    res.json(scores.map(score => {
+        return {
+            name: score.name,
+            score: score.score,
+            user_id: score.user_id,
+            created_at: score.createdAt,
+        }
+    }))
 })
 
 // Create a new score for this user
