@@ -52,6 +52,8 @@ app.post('/scores/:user_id', async (req, res) => {
 
 // Delete this user's scores, hidden
 app.delete('/scores/:user_id', async (req, res) => {
+    let scores = await Score.findAll({ where: { user_id: req.params.user_id }})
+    await Promise.all(scores.map(score => score.destroy()))
     res.sendStatus(201)
 })
 
