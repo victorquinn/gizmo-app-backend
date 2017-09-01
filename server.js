@@ -2,7 +2,9 @@ require('dotenv').config()
 const pg = require('pg');
 pg.defaults.ssl = true;
 
+const bodyParser = require('body-parser')
 const express = require('express')
+const morgan = require('morgan')
 const Sequelize = require('sequelize')
 
 // Set up models and db
@@ -20,6 +22,8 @@ sequelize.sync().then(() => {
 
 // Set up app
 const app = express()
+app.use(bodyParser.json())
+app.use(morgan('tiny'))
 
 // Get all scores
 app.get('/scores', async (req, res) => {
@@ -37,13 +41,18 @@ app.get('/scores', async (req, res) => {
 
 // Create a new score for this user
 app.post('/scores/:user_id', async (req, res) => {
-    // First let's append to the scores database
-    res.send(201)
+    await Score.create({
+        name: req.body.name,
+        user_id: req.params.user_id,
+        score: req.body.score,
+    })
+
+    res.sendStatus(201)
 })
 
 // Delete this user's scores, hidden
 app.delete('/scores/:user_id', async (req, res) => {
-    res.send(201)
+    res.sendStatus(201)
 })
 
 app.listen(process.env.PORT)
