@@ -5,6 +5,7 @@ pg.defaults.ssl = true;
 const bodyParser = require('body-parser')
 const express = require('express')
 const morgan = require('morgan')
+const request = require('request')
 const Sequelize = require('sequelize')
 
 // Set up models and db
@@ -50,11 +51,18 @@ app.post('/scores/:user_id', async (req, res) => {
     res.sendStatus(201)
 })
 
+const wrap = fn => (...args) => fn(...args).catch(args[2])
+
 // Delete this user's scores, hidden
 app.delete('/scores/:user_id', async (req, res) => {
     let scores = await Score.findAll({ where: { user_id: req.params.user_id }})
     await Promise.all(scores.map(score => score.destroy()))
     res.sendStatus(201)
 })
+
+app.get('/team', wrap(async (req, res, next) => {
+    let url = 'https://www.shopspring.com/team.json'
+    request(url).on('error', next).pipe(res)
+}))
 
 app.listen(process.env.PORT)
