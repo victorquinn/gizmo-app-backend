@@ -6,7 +6,7 @@ const express = require('express')
 const Sequelize = require('sequelize')
 
 // Set up models and db
-const sequelize = new Sequelize(process.env.DB)
+const sequelize = new Sequelize(process.env.DATABASE_URL)
 
 const User = sequelize.define('user', {
     name: Sequelize.STRING
