@@ -1,0 +1,7 @@
+{
+  "name": "gizmo-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "Victor Quinn <mail@victorquinn.com>",
+  "license": "MIT"
+}
