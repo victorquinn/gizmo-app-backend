@@ -36,7 +36,7 @@ app.get('/scores', async (req, res) => {
             name: score.name,
             score: score.score,
             user_id: score.user_id,
-            created_at: moment(score.createdAt).unix(),
+            timestamp: moment(score.createdAt).unix(),
         }
     }))
 })
