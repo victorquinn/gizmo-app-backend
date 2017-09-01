@@ -4,6 +4,7 @@ pg.defaults.ssl = true;
 
 const bodyParser = require('body-parser')
 const express = require('express')
+const moment = require('moment')
 const morgan = require('morgan')
 const request = require('request')
 const Sequelize = require('sequelize')
@@ -35,7 +36,7 @@ app.get('/scores', async (req, res) => {
             name: score.name,
             score: score.score,
             user_id: score.user_id,
-            created_at: score.createdAt,
+            created_at: moment(score.createdAt).unix(),
         }
     }))
 })
