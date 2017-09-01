@@ -5,6 +5,7 @@ pg.defaults.ssl = true;
 const express = require('express')
 const Sequelize = require('sequelize')
 
+// Set up models and db
 const sequelize = new Sequelize(process.env.DB)
 
 const User = sequelize.define('user', {
@@ -21,3 +22,15 @@ sequelize.sync().then(() => {
     console.log("db successfully sync'd")
 })
 
+// Set up app
+const app = express()
+
+app.get('/scores', (req, res) => {
+    res.json([{
+        userId: 1,
+        score: 230,
+        createdAt: '2017-09-01 12:59',
+    }])
+})
+
+app.listen(process.env.PORT)
