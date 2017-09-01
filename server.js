@@ -14,12 +14,6 @@ const Score = sequelize.define('score', {
     user_id: Sequelize.STRING,
 })
 
-const AllScores = sequelize.define('all_scores', {
-    name: Sequelize.STRING,
-    score: Sequelize.INTEGER,
-    user_id: Sequelize.STRING,
-})
-
 sequelize.sync().then(() => {
     console.log("db successfully sync'd")
 })
@@ -29,8 +23,9 @@ const app = express()
 
 // Get all scores
 app.get('/scores', async (req, res) => {
-    let scores = await Score.findAll();
-    res.json(scores.map(score => {
+    let scores = await sequelize.query('SELECT DISTINCT ON (user_id) * FROM scores ORDER BY user_id, score DESC');
+    console.log(scores[0])
+    res.json(scores[0].map(score => {
         return {
             name: score.name,
             score: score.score,
@@ -42,7 +37,7 @@ app.get('/scores', async (req, res) => {
 
 // Create a new score for this user
 app.post('/scores/:user_id', async (req, res) => {
-    
+    // First let's append to the scores database
     res.send(201)
 })
 
