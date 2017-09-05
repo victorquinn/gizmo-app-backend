@@ -38,7 +38,7 @@ app.get('/scores', async (req, res) => {
             timestamp : moment(score.createdAt).unix(),
         }
     })
-    scores = scores.sort((score1, score2) => score1.score <= score2.score )
+    scores = scores.sort((score1, score2) => score2.score - score1.score )
     res.json(scores)
 })
 
