@@ -29,16 +29,17 @@ app.use(morgan('tiny'))
 
 // Get all scores
 app.get('/scores', async (req, res) => {
-    let scores = await sequelize.query('SELECT DISTINCT ON (user_id) * FROM scores ORDER BY user_id, score DESC');
-    console.log(scores[0])
-    res.json(scores[0].map(score => {
+    let scoresRaw = await sequelize.query('SELECT DISTINCT ON (user_id) * FROM scores ORDER BY user_id, score DESC');
+    let scores = scoresRaw[0].map(score => {
         return {
             name: score.name,
             score: score.score,
             user_id: score.user_id,
-            timestamp: moment(score.createdAt).unix(),
+            timestamp : moment(score.createdAt).unix(),
         }
-    }))
+    })
+    scores = scores.sort((score1, score2) => score1.score <= score2.score )
+    res.json(scores)
 })
 
 // Create a new score for this user
